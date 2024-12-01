@@ -51,19 +51,6 @@ def make_map(coordinates, sommets):
     
     return grid
 
-trous, sommets = digger(data)
-make_map(trous, sommets)
-
-# Exemple : Liste des points formant les côtés du polygone (en `#`)
-trous
-
-# Détection des limites de la grille
-min_x = min(x for x, _ in trous)
-max_x = max(x for x, _ in trous)
-min_y = min(y for _, y in trous)
-max_y = max(y for _, y in trous)
-
-# Fonction pour vérifier si un point est dans le polygone (ray-casting)
 def is_point_inside_polygon(x, y, polygon):
     n = len(polygon)
     inside = False
@@ -75,8 +62,13 @@ def is_point_inside_polygon(x, y, polygon):
             inside = not inside
     return inside
 
-# Calcul de l'aire discrète
-def calculate_discrete_area(trous):
+def calculate_area(trous):
+    # Détection des limites de la grille
+    min_x = min(x for x, _ in trous)
+    max_x = max(x for x, _ in trous)
+    min_y = min(y for _, y in trous)
+    max_y = max(y for _, y in trous)
+    
     area = 0
     for x in range(min_x, max_x + 1):
         for y in range(min_y, max_y + 1):
@@ -84,6 +76,7 @@ def calculate_discrete_area(trous):
                 area += 1
     return area
 
-# Calcul et affichage de l'aire discrète
-discrete_area = calculate_discrete_area(trous)
-print(f"Aire discrète du polygone (incluant côtés et intérieur) : {discrete_area}")
+trous, sommets = digger(data)
+make_map(trous, sommets)
+area = calculate_area(trous)
+print(area)
