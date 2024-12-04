@@ -1,5 +1,4 @@
 MODE = 0
-NUMBER = 0
 
 def read_file(file):
     with open(file, 'r') as file:
