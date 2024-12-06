@@ -81,6 +81,7 @@ def simulate_guard_with_loop(grid, start_x, start_y, dir_idx):
             x, y = nx, ny
 
 possible_positions = 0
+k = 0
 
 # We cannot place an obstruction at the guard's starting position
 for i in range(rows):
@@ -93,5 +94,7 @@ for i in range(rows):
             # Simulate the guard's movement with the obstruction
             if simulate_guard_with_loop(grid_copy, start_x, start_y, dir_idx):
                 possible_positions += 1
+            else:
+                k += 1
 
-print("Part Two - Total possible obstruction positions:", possible_positions)
+print("Part Two - Total possible obstruction positions:", possible_positions, k)
