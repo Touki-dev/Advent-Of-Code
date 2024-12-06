@@ -3,14 +3,11 @@ import numpy as np
 def read_file(file):
     with open(file, 'r') as file:
         return [list(line.strip()) for line in file]
-       
+
 def part1(l, word):
-    rows = len(l)
-    cols = len(l[0])
-    word_len = len(word)
     total = 0
-    
-    # Directions: (dy, dx)
+
+    # Directions:
     directions = [
         (0, 1),    # droite
         (0, -1),   # gauche
@@ -21,25 +18,25 @@ def part1(l, word):
         (-1, 1),   # diagonale haut-droite
         (-1, -1)   # diagonale haut-gauche
     ]
-    
+
     def is_word_found(x, y, dx, dy):
-        """Vérifie si le mot existe à partir de (x, y) dans la direction (dx, dy)."""
-        for i in range(word_len):
+        # Vérifie si le mot existe à partir de (x, y) dans la direction (dx, dy).
+        for i in range(len(world)):
             nx, ny = x + i * dx, y + i * dy
-            if nx < 0 or ny < 0 or nx >= rows or ny >= cols:
+            if nx < 0 or ny < 0 or nx >= len(l) or ny >= len(l[0]):
                 return False  # Hors de la grille
             if l[nx][ny] != word[i]:
                 return False
         return True
-    
+
     # Parcourir chaque case de la grille
-    for x in range(rows):
-        for y in range(cols):
+    for x in range(len(l)):
+        for y in range(len(l[0])):
             # Tester chaque direction
             for dx, dy in directions:
                 if is_word_found(x, y, dx, dy):
                     total += 1
-    
+
     return total
 
 def part2(l):
@@ -53,9 +50,8 @@ def part2(l):
     return total
 
 
-    
+
 if __name__ == "__main__":
     l = read_file("input.txt")
     print(f"Résulat de la partie 1 : {part1(l, "XMAS")}")
     print(f"Résulat de la partie 2 : {part2(l)}")
-    
