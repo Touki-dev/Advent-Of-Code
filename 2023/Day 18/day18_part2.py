@@ -1,7 +1,8 @@
 from tqdm import tqdm
 import numpy as np
+from concurrent.futures import ThreadPoolExecutor
 
-data = open("data.txt", "r")
+data = open("input.txt", "r")
 data = data.read().split('\n')
 
 def hexToBase10(n):
@@ -61,18 +62,32 @@ def listToNumpy(polygon):
     grouped_coords = {k: np.array(v) for k, v in grouped_coords.items()}
     return grouped_coords
 
+# Calcul de l'aire avec multithreading
 def calculate_area(polygon, max_x, max_y, min_x, min_y):
-    area = 0
-    for x in tqdm(range(min_y, max_y + 1), desc=f"Calculating area ({area})"):
+    def process_row(x):
         inside = 0
-        for y in tqdm(polygon[x], desc=f"Calculating area (Y for x={x})", leave=False):
+        row_area = 0
+        print("row", x - min_x, "/", max_x-min_x, "...")
+        for y in range(min_x, max_x + 1):
             if x in polygon.keys():
                 if y in polygon[x]:
                     inside += 1
-                    area += 1
+                    row_area += 1
                 elif inside % 2 == 1:
-                    area += 1
-    return area
+                    row_area += 1
+        
+        return row_area
+
+    # Utilisation d'un pool de threads pour paralléliser les lignes
+    with ThreadPoolExecutor() as executor:
+        row_areas = list(tqdm(
+            executor.map(process_row, range(min_x, max_x + 1)),
+            total=(max_y - min_y + 1),
+            desc="Calculating area"
+        ))
+    
+    # Calcul final de l'aire
+    return sum(row_areas)
 
 # Appel des fonctions
 polygon, sommets, max_x, max_y, min_x, min_y = digger(data)
