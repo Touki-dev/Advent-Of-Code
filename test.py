@@ -1,2 +1,97 @@
-arr = [-1606495, -1477568, -1360141, -1353730, -1270800, -1195190, -1174981, -1155796, -1018045, -930326, -913034, -879233, -826295, -825453, -728822, -727280, -662946, -639315, -593642, -553311, -491824, -438134, -437998, -420903, -356892, -350815, -321012, -147381, -143433, -98460, -70328, 0, 16160, 34613, 84575, 101593, 126946, 272813, 281986, 328290, 348382, 422427, 500996, 619213, 680085, 697686, 699316, 701364, 716427, 790909, 802122, 883495, 883912, 894002, 966815, 977503, 1009780, 1052487, 1065122, 1078829, 1093249, 1117873, 1181497, 1261029, 1276905, 1293201, 1326116, 1364221, 1424730, 1432500, 1486923, 1545661, 1673732, 1711299, 1782219, 1851221, 1889078, 1936163, 1957706, 2005782, 2042487, 2101058, 2266128, 2273601, 2289070, 2296920, 2324760, 2358056, 2458963, 2490566, 2495509, 2515720, 2562642, 2562828, 2629448, 2654955, 2722004, 2753625, 2763504, 2800448, 2803743, 2824788, 2920303, 2928317, 3027685, 3118098, 3130501, 3148810, 3245350, 3274764, 3278455, 3300104, 3318425, 3415341, 3478998, 3495941, 3497553, 3505892, 3529668, 3569498, 3569907, 3587588, 3718924, 3781793, 3821422, 3830616, 3838628, 3909100, 3915825, 3995095, 4008921, 4126843, 4202523, 4212887, 4298804, 4358916, 4480933, 4529910, 4550099, 4640870, 4686866, 4765635, 4868365, 4888875, 4977101, 5025567, 5034469, 5075944, 5178960, 5210887, 5274814, 5297568, 5299886, 5351997, 5354793, 5362566, 5370951, 5380732, 5443491, 5484635, 5484813, 5524759, 5537478, 5545815, 5626243, 5652598, 5717692, 5726943, 5765716, 5786665, 5800307, 5862673, 5886272, 5941193, 5943349, 6070606, 6089339, 6116158, 6180800, 6207619, 6246993, 6264962, 6353313, 6363763, 6382833, 6402221, 6427722, 6430719, 6432905, 6458971, 6541465, 6626553, 6631312, 6655986, 6675630, 6685871, 6711322, 6736606, 6753566, 6755837, 6759009, 6759624, 6759988, 6816701, 6825844, 6829442, 6830626, 6841687, 6865523, 6891977, 6900305, 6906861, 6981701, 7071214, 7072842, 7099327, 7108964, 7131202, 7149069, 7173228, 7181785, 7194662, 7213608, 7256186, 7278638, 7291805, 7302622, 7305168, 7323160, 7352052, 7368114, 7372140, 7378128, 7419243, 7427630, 7451913, 7454780, 7531845, 7539006, 7542539, 7569553, 7599772, 7618301, 7645298, 7652480, 7655706, 7657734, 7679433, 7698229, 7717100, 7720147, 7724604, 7768961, 7786314, 7839909, 7843436, 7850084, 7938041, 7938561, 7938704, 7947297, 7987198, 7992439, 8019062, 8082791, 8093024, 8137960, 8141653, 8159150, 8170550, 8191532, 8214543, 8214964, 8257522, 8303471, 8312697, 8419570, 8502640, 8528981, 8537440, 8546941, 8639977, 8807555, 8840110, 8930000, 9017732, 9094714, 9320069, 9365753, 9490626]
-print(len(arr))
+# Read the map from the input file
+with open('input.txt', 'r') as f:
+    grid = [list(line.rstrip('\n')) for line in f]
+
+rows = len(grid)
+cols = len(grid[0])
+
+# Directions: Up, Right, Down, Left
+directions = ['^', '>', 'v', '<']
+dx = [-1, 0, 1, 0]  # Change in row for each direction
+dy = [0, 1, 0, -1]  # Change in column for each direction
+
+# Find the guard's starting position and facing direction
+start_x, start_y, dir_idx = None, None, None
+for i in range(rows):
+    for j in range(cols):
+        if grid[i][j] in directions:
+            start_x, start_y = i, j
+            dir_idx = directions.index(grid[i][j])
+            break
+    if start_x is not None:
+        break
+
+# Part One: Simulate the guard's movement and count distinct positions visited
+def simulate_guard(grid, start_x, start_y, dir_idx):
+    x, y = start_x, start_y
+    visited = set()
+    visited.add((x, y))
+    rows = len(grid)
+    cols = len(grid[0])
+    while True:
+        # Next position
+        nx = x + dx[dir_idx]
+        ny = y + dy[dir_idx]
+
+        # Check if next position is outside the map
+        if nx < 0 or nx >= rows or ny < 0 or ny >= cols:
+            break  # Guard leaves the map
+
+        # Check if there's an obstacle
+        if grid[nx][ny] == '#':
+            # Turn right 90 degrees
+            dir_idx = (dir_idx + 1) % 4
+        else:
+            # Move forward
+            x, y = nx, ny
+            visited.add((x, y))
+
+    return visited
+
+visited_positions = simulate_guard(grid, start_x, start_y, dir_idx)
+print("Part One - Total distinct positions visited:", len(visited_positions))
+
+# Part Two: Find all positions where adding an obstruction causes the guard to loop
+def simulate_guard_with_loop(grid, start_x, start_y, dir_idx):
+    x, y = start_x, start_y
+    visited = set()
+    rows = len(grid)
+    cols = len(grid[0])
+    while True:
+        # Check if the guard is revisiting a state (position and direction)
+        state = (x, y, dir_idx)
+        if state in visited:
+            return True  # Guard is in a loop
+        visited.add(state)
+
+        # Next position
+        nx = x + dx[dir_idx]
+        ny = y + dy[dir_idx]
+
+        # Check if next position is outside the map
+        if nx < 0 or nx >= rows or ny < 0 or ny >= cols:
+            return False  # Guard leaves the map
+
+        # Check if there's an obstacle
+        if grid[nx][ny] == '#':
+            # Turn right 90 degrees
+            dir_idx = (dir_idx + 1) % 4
+        else:
+            # Move forward
+            x, y = nx, ny
+
+possible_positions = 0
+
+# We cannot place an obstruction at the guard's starting position
+for i in range(rows):
+    for j in range(cols):
+        if grid[i][j] == '.' and (i, j) != (start_x, start_y):
+            # Copy the grid and place an obstruction at (i, j)
+            grid_copy = [row[:] for row in grid]
+            grid_copy[i][j] = '#'
+
+            # Simulate the guard's movement with the obstruction
+            if simulate_guard_with_loop(grid_copy, start_x, start_y, dir_idx):
+                possible_positions += 1
+
+print("Part Two - Total possible obstruction positions:", possible_positions)
