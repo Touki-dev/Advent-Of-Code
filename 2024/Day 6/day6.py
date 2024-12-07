@@ -33,10 +33,47 @@ def part1(l):
             coord_guard.append((x,y))
     
 def part2(l, start_x, start_y):
-    ...
+    def simulate_guard(l, start_x, start_y, direction):
+        x, y = start_x, start_y
+        visited = set()
+        while True:
+            # Check if the guard is revisiting a state (position and direction)
+            state = (x, y, direction)
+            if state in visited:
+                return True  # Guard is in a loop
+            visited.add(state)
+
+            # Next position
+            nx = x + DX[direction]
+            ny = y + DY[direction]
+
+            if not is_coord_in(l, (nx,ny)):
+                return False
+
+            if l[nx, ny] == '#':
+                direction = (direction + 1) % 4
+            else:
+                x, y = nx, ny
+
+    possible_positions = 0
+    k = 0
+    direction = 0
+    for i in range(len(l[0])):
+        for j in range(len(l)):
+            if l[i, j] == '.' and (i, j) != (start_x, start_y):
+                l_copy = l.copy()
+                l_copy[i, j] = '#'
+
+                if simulate_guard(l_copy, start_x, start_y, direction):
+                    possible_positions += 1
+                else:
+                    k+=1
+    print(k)
+    return possible_positions
                     
 if __name__ == "__main__":
     l = read_file("input.txt")
     l = np.array([list(ligne) for ligne in l])
     result1 = part1(l)
     print(f"Résulat de la partie 1 : {result1[0]}")
+    print(f"Résulat de la partie 2 : {part2(l, result1[1][0], result1[1][0])}")
