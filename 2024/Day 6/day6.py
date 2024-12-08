@@ -40,7 +40,7 @@ def part2(l, start_x, start_y):
             # Check if the guard is revisiting a state (position and direction)
             state = (x, y, direction)
             if state in visited:
-                return True  # Guard is in a loop
+                return True
             visited.add(state)
 
             # Next position
