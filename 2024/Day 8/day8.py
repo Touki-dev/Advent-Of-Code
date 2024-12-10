@@ -1,14 +1,7 @@
-FORMAT = 1
-
 def read_file(file):
     with open(file, 'r') as file:
         lignes = file.read().split('\n')
-        if FORMAT == 0: # Lignes
-            return lignes
-        if FORMAT == 1: # Grid
-            return list(map(list, lignes))
-        if FORMAT == 2: # Custom
-            return [(int(i.split(': ')[0]), list(map(int, i.split(': ')[1].split()))) for i in lignes]
+        return list(map(list, lignes))
 
 def part1(l):
     antennes = {}
@@ -87,7 +80,6 @@ def part2(l):
                             an[0] += dist[0]
                             an[1] += dist[1]
     
-    # Étape 3 : Ajoute toutes les antennes elles-mêmes si elles ne sont pas isolées
     for ant in antennes:
         if len(antennes[ant]) > 1:
             antinoeuds.update(antennes[ant])
