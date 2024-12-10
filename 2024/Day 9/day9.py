@@ -1,16 +1,7 @@
-#!/usr/bin/env pypy3
-
-FORMAT = 2
-
 def read_file(file):
     with open(file, 'r') as file:
         lignes = file.read().split('\n')
-        if FORMAT == 0: # Lignes
-            return lignes
-        if FORMAT == 1: # Grid
-            return list(map(list, lignes))
-        if FORMAT == 2: # Custom
-            return ''.join(lignes)
+        return ''.join(lignes)
 
 
 def part1(l):
