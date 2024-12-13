@@ -16,14 +16,26 @@ def part1(l):
         b = np.array(list(map(lambda x: int(x[2:]),coord_prize)))
         x = np.linalg.solve(a, b)
 
-        if x[0] % 1 == 0 and x[1] % 1 == 0:
-            print(x[0]*3 + x[1])
+        if round(x[0], 3).is_integer() and round(x[1], 3).is_integer():
             total += x[0]*3 + x[1]
 
     return total
 
 def part2(l):
-    ...
+    total = 0
+    for machine in l:
+        coord_buttonA = [i for i in machine[0].split(": ")[1].split(", ")]
+        coord_buttonB = [i for i in machine[1].split(": ")[1].split(", ")]
+        coord_prize = [i for i in machine[2].split(": ")[1].split(", ")]
+
+        a = np.array([list(map(int, [coord_buttonA[0][2:], coord_buttonB[0][2:]])), list(map(int, [coord_buttonA[1][2:], coord_buttonB[1][2:]]))])
+        b = np.array(list(map(lambda x: int(x[2:]) + 10000000000000, coord_prize)))
+        x = np.linalg.solve(a, b)
+
+        if round(x[0], 3).is_integer() and round(x[1], 3).is_integer():
+            total += x[0]*3 + x[1]
+
+    return total
 
 if __name__ == "__main__":
     l = read_file("input.txt")
