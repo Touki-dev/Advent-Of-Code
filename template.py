@@ -13,7 +13,6 @@ def read_file(file):
 def part1(l):
     ...
 
-
 def part2(l):
     ...
 
