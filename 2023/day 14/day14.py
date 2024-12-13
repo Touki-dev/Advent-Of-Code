@@ -5,7 +5,7 @@ def read_file(file):
     with open(file, 'r') as file:
         lignes = file.read().split('\n')
         return np.array(list(map(list, lignes)))
-
+    
 def simulate_rolling(rock, l, d):
     x,y = rock
     nx = x
@@ -33,7 +33,7 @@ def part1(l):
     return total
 
 def part2(l):
-    rounded_rocks = [coord for coord in np.ndindex(l.shape) if l[coord] == "O"]
+    rounded_rocks = [tuple(coord) for coord in np.ndindex(l.shape) if l[coord] == "O"]
     for _ in tqdm(range(1000000000)):
         for d in DIRS:
             for rock in rounded_rocks:
@@ -50,4 +50,5 @@ def part2(l):
 if __name__ == "__main__":
     l = read_file("input.txt")
     print(f"Résulat de la partie 1 : {part1(l)}")
-    print(f"Résulat de la partie 2 : {part2(l)}")
+    with open("result.txt", "w") as fichier:
+        fichier.write(str(part2(l)))
