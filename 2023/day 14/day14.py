@@ -9,6 +9,15 @@ def read_file(file):
 def simulate_rolling(rock, l, d):
     x,y = rock
     nx = x
+    
+    if d[1] == 0:
+        tj = l[rock[0]::d[0], rock[1]]
+    else:
+        tj = l[rock[0], rock[1]::d[1]]
+    
+    index_stop = np.where(tj == "#")
+    
+    if len(index_stop[0]) != 0
     for i in range(rock[0]):
         nx, ny = x + d[0], y + d[1]
         if 0 <= nx < len(l) and 0 <= ny < len(l[0]) and l[nx,ny] == ".":
