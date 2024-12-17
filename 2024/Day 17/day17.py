@@ -12,16 +12,12 @@ def operand_combo(operand, A, B, C):
         return B
     elif operand == 6:
         return C
-    return 0  # Cas réservé, non utilisé
+    return 0
 
-def part1(l):
-    registers = {
-        "A": l[0][0].split(": ")[1],
-        "B": l[0][1].split(": ")[1],
-        "C": l[0][2].split(": ")[1]
-    }
-    program = list(map(int, l[1][0].split(": ")[1]))
+def run_program(program, registres):
+    A,B,C = registres
     output = []
+    pointer = 0
     
     while pointer < len(program):
         opcode = program[pointer]
@@ -55,13 +51,27 @@ def part1(l):
         elif opcode == 7:  # cdv
             denominator = 2 ** operand_combo(operand, A, B, C)
             C = A // denominator if denominator != 0 else 0
-        
-        # Passer à l'instruction suivante (sauf pour jnz)
+            
         pointer += 2
-    return output
 
 def part2(l):
-    ...
+    program = list(map(int, l[1][0].split(": ")[1].split(',')))
+    A = sum(7 * 8**i for i in range(len(program) - 1)) + 1
+
+    while True:
+        result = run_program(program, [A,0,0])
+
+        if len(result) > len(program):
+            raise ValueError("Trop long !")
+
+        if result == program:
+            return A
+        add = 0
+        for i in range(len(result) - 1, -1, -1):
+            if result[i] != program[i]:
+                add = 8**i
+                A += add
+                break
 
 if __name__ == "__main__":
     l = read_file("input.txt")
