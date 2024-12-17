@@ -23,9 +23,9 @@ def part1(l):
     program = list(map(int, l[1][0].split(": ")[1]))
     output = []
     
-    for i in range(len(0, program, 2)):
-        opcode = program[i]
-        operand = program[i+1]
+    while pointer < len(program):
+        opcode = program[pointer]
+        operand = program[pointer+1]
         
         if opcode == 0:  # adv
             denominator = 2 ** operand_combo(operand, A, B, C)
