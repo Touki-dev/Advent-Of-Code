@@ -58,6 +58,7 @@ def part1(l):
         
         # Passer à l'instruction suivante (sauf pour jnz)
         pointer += 2
+    return output
 
 def part2(l):
     ...
