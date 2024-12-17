@@ -4,7 +4,6 @@ def read_file(file):
         return [ligne.strip().split("\n") for ligne in lignes]
 
 def operand_combo(operand, A, B, C):
-    """Calcule la valeur d'un opérande combo."""
     if operand <= 3:
         return operand
     elif operand == 4:
