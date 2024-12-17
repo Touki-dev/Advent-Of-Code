@@ -53,6 +53,14 @@ def run_program(program, registres):
             C = A // denominator if denominator != 0 else 0
             
         pointer += 2
+        
+    return output
+
+def part1(l):
+    A = int(l[0][0].split(": ")[1])
+    program = list(map(int, l[1][0].split(": ")[1].split(',')))
+    output = run_program(program, [A,0,0])
+    return ",".join(list(map(str, output)))
 
 def part2(l):
     program = list(map(int, l[1][0].split(": ")[1].split(',')))
