@@ -84,5 +84,5 @@ def part2(l):
 
 if __name__ == "__main__":
     l = read_file("input.txt")
-    #print(f"Résulat de la partie 1 : {part1(l)[0]}")
+    print(f"Résulat de la partie 1 : {part1(l)[0]}")
     print(f"Résulat de la partie 2 : {part2(l)}")
